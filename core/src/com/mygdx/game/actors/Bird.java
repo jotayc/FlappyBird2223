@@ -15,6 +15,14 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Bird extends Actor {
+
+
+    private static final int STATE_NORMAL = 0;
+    private static final int STATE_DEAD = 1;
+    private static final float JUMP_SPEED = 50f;
+
+    private int state;
+
     private Animation<TextureRegion> birdAnimation;
     private Vector2 position;
 
@@ -25,12 +33,15 @@ public class Bird extends Actor {
     private Body body;
     private Fixture fixture;
 
+
+
     public Bird(World world, Animation<TextureRegion> animation, Vector2 position){
         this.birdAnimation = animation;
         this.position = position;
         this.world = world;
-
         this.stateTime = 0f;
+        this.state = STATE_NORMAL;
+
         createBody();
         createFixture();
 
@@ -61,7 +72,11 @@ public class Bird extends Actor {
 
     @Override
     public void act(float delta) {
+        boolean jump  = Gdx.input.justTouched();
 
+        if(jump && this.state == STATE_NORMAL){
+            this.body.setLinearVelocity(0,JUMP_SPEED);
+        }
     }
 
     @Override

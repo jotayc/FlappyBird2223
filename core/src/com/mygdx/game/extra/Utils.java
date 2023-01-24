@@ -15,8 +15,11 @@ public class Utils {
     public static final String BIRD1 = "bird1";
     public static final String BIRD2 = "bird2";
     public static final String BIRD3 = "bird3";
+    public static final String PIPE_DOWN = "pipeDown";
+    public static final String PIPE_UP = "pipeUp";
 
 
     //Identificador de cuerpos
     public static final String USER_BIRD = "bird";
+    public static final String USER_PIPE_DOWN = "pipeDown";
 }

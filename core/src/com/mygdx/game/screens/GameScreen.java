@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MainGame;
 import com.mygdx.game.actors.Bird;
+import com.mygdx.game.actors.Pipes;
 
 public class GameScreen  extends BaseScreen{
 
@@ -25,6 +26,8 @@ public class GameScreen  extends BaseScreen{
     private Image background;
 
     private World world;
+
+    Pipes pipes;
 
 
     //Depuración
@@ -58,6 +61,7 @@ public class GameScreen  extends BaseScreen{
     @Override
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         this.stage.act();
         this.world.step(delta,6,2);
         this.stage.draw();
@@ -70,6 +74,11 @@ public class GameScreen  extends BaseScreen{
     public void show() {
         addBackground();
         addBird();
+
+        TextureRegion pipeTRDown = mainGame.assetManager.getPipeDownTR();
+        this.pipes = new Pipes(this.world, pipeTRDown, new Vector2(3.75f,2f));
+        this.stage.addActor(this.pipes);
+
     }
 
     @Override
