@@ -6,6 +6,7 @@ import static com.mygdx.game.extra.Utils.BIRD1;
 import static com.mygdx.game.extra.Utils.BIRD2;
 import static com.mygdx.game.extra.Utils.BIRD3;
 import static com.mygdx.game.extra.Utils.PIPE_DOWN;
+import static com.mygdx.game.extra.Utils.PIPE_UP;
 
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -42,6 +43,10 @@ public class AssetMan {
     //Textura de las tuberías
     public TextureRegion getPipeDownTR(){
         return this.textureAtlas.findRegion(PIPE_DOWN);
+    }
+
+    public TextureRegion getPipeTopTR(){
+        return this.textureAtlas.findRegion(PIPE_UP);
     }
 
 }

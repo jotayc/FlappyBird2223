@@ -76,7 +76,8 @@ public class GameScreen  extends BaseScreen{
         addBird();
 
         TextureRegion pipeTRDown = mainGame.assetManager.getPipeDownTR();
-        this.pipes = new Pipes(this.world, pipeTRDown, new Vector2(3.75f,2f));
+        TextureRegion pipeTRTop= mainGame.assetManager.getPipeTopTR();
+        this.pipes = new Pipes(this.world, pipeTRDown, pipeTRTop, new Vector2(3.75f,0f));
         this.stage.addActor(this.pipes);
 
     }
@@ -85,6 +86,9 @@ public class GameScreen  extends BaseScreen{
     public void hide() {
         this.bird.detach();
         this.bird.remove();
+
+        this.pipes.detach();
+        this.pipes.remove();
     }
 
     @Override

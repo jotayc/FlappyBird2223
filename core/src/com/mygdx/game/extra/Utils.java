@@ -22,4 +22,6 @@ public class Utils {
     //Identificador de cuerpos
     public static final String USER_BIRD = "bird";
     public static final String USER_PIPE_DOWN = "pipeDown";
+    public static final String USER_PIPE_UP = "pipeUp";
+    public static final String USER_COUNTER = "counter";
 }
