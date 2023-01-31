@@ -5,10 +5,14 @@ import static com.mygdx.game.extra.Utils.BACKGROUND_IMAGE;
 import static com.mygdx.game.extra.Utils.BIRD1;
 import static com.mygdx.game.extra.Utils.BIRD2;
 import static com.mygdx.game.extra.Utils.BIRD3;
+import static com.mygdx.game.extra.Utils.MUSIC_BG;
 import static com.mygdx.game.extra.Utils.PIPE_DOWN;
 import static com.mygdx.game.extra.Utils.PIPE_UP;
+import static com.mygdx.game.extra.Utils.SOUND_JUMP;
 
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -22,6 +26,8 @@ public class AssetMan {
         this.assetManager = new AssetManager();
 
         assetManager.load(ATLAS_MAP, TextureAtlas.class);
+        assetManager.load(SOUND_JUMP, Sound.class);
+        assetManager.load(MUSIC_BG, Music.class);
         assetManager.finishLoading();
 
         this.textureAtlas = assetManager.get(ATLAS_MAP);
@@ -48,6 +54,16 @@ public class AssetMan {
     public TextureRegion getPipeTopTR(){
         return this.textureAtlas.findRegion(PIPE_UP);
     }
+
+    public Sound getJumpSound(){
+        return this.assetManager.get(SOUND_JUMP);
+    }
+
+    public Music getMusicBG(){
+        return this.assetManager.get(MUSIC_BG);
+    }
+
+
 
 }
 

@@ -3,6 +3,7 @@ package com.mygdx.game.actors;
 import static com.mygdx.game.extra.Utils.USER_BIRD;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,9 +18,10 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Bird extends Actor {
 
 
+
     private static final int STATE_NORMAL = 0;
     private static final int STATE_DEAD = 1;
-    private static final float JUMP_SPEED = 50f;
+    private static final float JUMP_SPEED = 5f;
 
     private int state;
 
@@ -33,14 +35,15 @@ public class Bird extends Actor {
     private Body body;
     private Fixture fixture;
 
+    private Sound jumpSound;
 
-
-    public Bird(World world, Animation<TextureRegion> animation, Vector2 position){
+    public Bird(World world, Animation<TextureRegion> animation, Sound sound, Vector2 position){
         this.birdAnimation = animation;
         this.position = position;
         this.world = world;
         this.stateTime = 0f;
         this.state = STATE_NORMAL;
+        this.jumpSound = sound;
 
         createBody();
         createFixture();
@@ -75,7 +78,9 @@ public class Bird extends Actor {
         boolean jump  = Gdx.input.justTouched();
 
         if(jump && this.state == STATE_NORMAL){
+            this.jumpSound.play();
             this.body.setLinearVelocity(0,JUMP_SPEED);
+
         }
     }
 

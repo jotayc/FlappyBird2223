@@ -2,7 +2,7 @@ package com.mygdx.game.extra;
 
 public class Utils {
 
-    public static final int SCREEN_HEIGHT = 800;
+    public static final int SCREEN_HEIGTH = 800;
     public static final int SCREEN_WIDTH = 480;
 
 
@@ -17,6 +17,8 @@ public class Utils {
     public static final String BIRD3 = "bird3";
     public static final String PIPE_DOWN = "pipeDown";
     public static final String PIPE_UP = "pipeUp";
+    public static final String SOUND_JUMP = "jump4.mp3";
+    public static final String MUSIC_BG = "musicbg.mp3";
 
 
     //Identificador de cuerpos
@@ -24,4 +26,5 @@ public class Utils {
     public static final String USER_PIPE_DOWN = "pipeDown";
     public static final String USER_PIPE_UP = "pipeUp";
     public static final String USER_COUNTER = "counter";
+    public static final String USER_FLOOR = "floor";
 }

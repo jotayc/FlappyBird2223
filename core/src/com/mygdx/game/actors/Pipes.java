@@ -15,13 +15,13 @@ import com.mygdx.game.extra.Utils;
 
 public class Pipes extends Actor {
 
-    //Todo 5. Para crear las tuberías debemos fijar un ancho y alto
+
     private static final float PIPE_WIDTH = 1f;
     private static final float PIPE_HEIGHT = 4f;
     private static final float COUNTER_HEIGHT = 2f;
     private static final float SPEED = -0.2f;
 
-    //Todo 6. Creamos Texturas, Body, fixture y mundo
+
     private TextureRegion pipeDownTR;
     private TextureRegion pipeTopTR;
 
@@ -35,7 +35,7 @@ public class Pipes extends Actor {
 
     private World world;
 
-    //Todo 7 Constructor con mundo textura y posicion
+
     public Pipes(World world, TextureRegion trpDown, TextureRegion trpTop, Vector2 position) {
         this.world = world;
         this.pipeDownTR = trpDown;
@@ -48,7 +48,7 @@ public class Pipes extends Actor {
     }
 
 
-    //Todo 8. creamos metodo para body con parametro
+
     private void createBodyPipeDown(Vector2 position) {
         BodyDef def = new BodyDef();
         def.position.set(position);
@@ -71,7 +71,7 @@ public class Pipes extends Actor {
 
     }
 
-    //Todo 9 Creamos método para la fixture
+
     private void createFixture() {
         PolygonShape shape = new PolygonShape();
         shape.setAsBox(PIPE_WIDTH/2, PIPE_HEIGHT/2);
@@ -99,7 +99,7 @@ public class Pipes extends Actor {
         polygonShape.dispose();
     }
 
-    //Todo 10. Sobrecargamos métodos act y draw
+
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -114,7 +114,7 @@ public class Pipes extends Actor {
         batch.draw(this.pipeTopTR, getX(),getY(),PIPE_WIDTH,PIPE_HEIGHT);
     }
 
-    //Todo 11. Creamos detach para liberar recursos
+
     public void detach(){
         bodyDown.destroyFixture(fixtureDown);
         world.destroyBody(bodyDown);
