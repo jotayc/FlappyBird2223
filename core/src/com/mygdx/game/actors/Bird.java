@@ -18,9 +18,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 public class Bird extends Actor {
 
 
-
-    private static final int STATE_NORMAL = 0;
-    private static final int STATE_DEAD = 1;
+    //Todo 0** Hacemos public los estados del pájaro para saber si se ha muerto o no (debería mejorarse)
+    public static final int STATE_NORMAL = 0;
+    public static final int STATE_DEAD = 1;
     private static final float JUMP_SPEED = 5f;
 
     private int state;
@@ -69,6 +69,12 @@ public class Bird extends Actor {
 
         circle.dispose();
 
+    }
+
+
+
+    public int getState(){
+        return this.state;
     }
 
 

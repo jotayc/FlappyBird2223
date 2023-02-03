@@ -19,7 +19,7 @@ public class Pipes extends Actor {
     private static final float PIPE_WIDTH = 1f;
     private static final float PIPE_HEIGHT = 4f;
     private static final float COUNTER_HEIGHT = 2f;
-    private static final float SPEED = -0.2f;
+    private static final float SPEED = -2f;
 
 
     private TextureRegion pipeDownTR;
@@ -97,6 +97,11 @@ public class Pipes extends Actor {
         this.fixtureCounter.setSensor(true);
         this.fixtureCounter.setUserData(Utils.USER_COUNTER);
         polygonShape.dispose();
+    }
+
+    //Todo 5. Creamos un método que nos diga si el objeto pipes está fuera de la pantalla
+    public boolean isOutOfScreen(){
+        return this.bodyDown.getPosition().x <= -2f;
     }
 
 
