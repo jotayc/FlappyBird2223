@@ -17,7 +17,7 @@ public class Utils {
     public static final String BIRD3 = "bird3";
     public static final String PIPE_DOWN = "pipeDown";
     public static final String PIPE_UP = "pipeUp";
-    public static final String SOUND_JUMP = "jump4.mp3";
+    public static final String SOUND_JUMP = "jump.mp3";
     public static final String MUSIC_BG = "musicbg.mp3";
 
 
