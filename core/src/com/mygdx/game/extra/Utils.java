@@ -20,6 +20,9 @@ public class Utils {
     public static final String SOUND_JUMP = "jump.mp3";
     public static final String MUSIC_BG = "musicbg.mp3";
 
+    //Creamos los identificadores de las fuentes
+    public static final String FONT_FNT = "FBFont.fnt";
+    public static final String FONT_PNG = "FBFont.png";
 
     //Identificador de cuerpos
     public static final String USER_BIRD = "bird";

@@ -5,15 +5,19 @@ import static com.mygdx.game.extra.Utils.BACKGROUND_IMAGE;
 import static com.mygdx.game.extra.Utils.BIRD1;
 import static com.mygdx.game.extra.Utils.BIRD2;
 import static com.mygdx.game.extra.Utils.BIRD3;
+import static com.mygdx.game.extra.Utils.FONT_FNT;
+import static com.mygdx.game.extra.Utils.FONT_PNG;
 import static com.mygdx.game.extra.Utils.MUSIC_BG;
 import static com.mygdx.game.extra.Utils.PIPE_DOWN;
 import static com.mygdx.game.extra.Utils.PIPE_UP;
 import static com.mygdx.game.extra.Utils.SOUND_JUMP;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
@@ -63,6 +67,12 @@ public class AssetMan {
         return this.assetManager.get(MUSIC_BG);
     }
 
+    //Todo 2. Para usar las fuentes previamente las habremos tenido que añadir,
+    // se recomienda usar la aplicación Hiero
+    //Crear en utils las variables para los identificadores de los archivos.
+    public BitmapFont getFont(){
+        return new BitmapFont(Gdx.files.internal(FONT_FNT),Gdx.files.internal(FONT_PNG), false);
+    }
 
 
 }
