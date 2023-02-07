@@ -7,6 +7,8 @@ import static com.mygdx.game.extra.Utils.BIRD2;
 import static com.mygdx.game.extra.Utils.BIRD3;
 import static com.mygdx.game.extra.Utils.FONT_FNT;
 import static com.mygdx.game.extra.Utils.FONT_PNG;
+import static com.mygdx.game.extra.Utils.GAMEOVER_SOUND;
+import static com.mygdx.game.extra.Utils.HIT_SOUND;
 import static com.mygdx.game.extra.Utils.MUSIC_BG;
 import static com.mygdx.game.extra.Utils.PIPE_DOWN;
 import static com.mygdx.game.extra.Utils.PIPE_UP;
@@ -30,8 +32,11 @@ public class AssetMan {
         this.assetManager = new AssetManager();
 
         assetManager.load(ATLAS_MAP, TextureAtlas.class);
-        assetManager.load(SOUND_JUMP, Sound.class);
+
         assetManager.load(MUSIC_BG, Music.class);
+        assetManager.load(SOUND_JUMP, Sound.class);
+        assetManager.load(HIT_SOUND, Sound.class);
+        assetManager.load(GAMEOVER_SOUND, Sound.class);
         assetManager.finishLoading();
 
         this.textureAtlas = assetManager.get(ATLAS_MAP);
@@ -63,12 +68,18 @@ public class AssetMan {
         return this.assetManager.get(SOUND_JUMP);
     }
 
+    public Sound getHitSound(){
+        return this.assetManager.get(HIT_SOUND);
+    }
+    public Sound getGameOverSound(){
+        return this.assetManager.get(GAMEOVER_SOUND);
+    }
+
     public Music getMusicBG(){
         return this.assetManager.get(MUSIC_BG);
     }
 
-    //Todo 2. Para usar las fuentes previamente las habremos tenido que añadir,
-    // se recomienda usar la aplicación Hiero
+
     //Crear en utils las variables para los identificadores de los archivos.
     public BitmapFont getFont(){
         return new BitmapFont(Gdx.files.internal(FONT_FNT),Gdx.files.internal(FONT_PNG), false);

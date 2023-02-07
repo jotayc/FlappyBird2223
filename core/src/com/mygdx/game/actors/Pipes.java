@@ -56,7 +56,6 @@ public class Pipes extends Actor {
         bodyDown = world.createBody(def);
         bodyDown.setUserData(Utils.USER_PIPE_DOWN);
         bodyDown.setLinearVelocity(SPEED,0);
-
     }
 
     private void createBodyPipeTop() {
@@ -66,7 +65,6 @@ public class Pipes extends Actor {
 
         def.type = BodyDef.BodyType.KinematicBody;
         bodyTop = world.createBody(def);
-        bodyTop.setUserData(Utils.USER_PIPE_UP);
         bodyTop.setLinearVelocity(SPEED,0);
 
     }
@@ -77,8 +75,9 @@ public class Pipes extends Actor {
         shape.setAsBox(PIPE_WIDTH/2, PIPE_HEIGHT/2);
 
         this.fixtureDown = bodyDown.createFixture(shape, 8);
+        this.fixtureDown.setUserData(Utils.USER_PIPE_DOWN);
         this.fixtureTop = bodyTop.createFixture(shape, 8);
-
+        this.fixtureTop.setUserData(Utils.USER_PIPE_UP);
         shape.dispose();
     }
 
@@ -104,6 +103,12 @@ public class Pipes extends Actor {
         return this.bodyDown.getPosition().x <= -2f;
     }
 
+    //Todo 2. Creamos un método para detener el movimiento de las tuberías y el contador
+    public void stopPipes() {
+        bodyTop.setLinearVelocity(0, 0);
+        bodyDown.setLinearVelocity(0, 0);
+        bodyCounter.setLinearVelocity(0,0);
+    }
 
     @Override
     public void act(float delta) {

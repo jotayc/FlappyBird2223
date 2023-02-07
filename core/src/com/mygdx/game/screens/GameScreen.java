@@ -2,7 +2,10 @@ package com.mygdx.game.screens;
 
 import static com.mygdx.game.extra.Utils.SCREEN_HEIGTH;
 import static com.mygdx.game.extra.Utils.SCREEN_WIDTH;
+import static com.mygdx.game.extra.Utils.USER_BIRD;
+import static com.mygdx.game.extra.Utils.USER_COUNTER;
 import static com.mygdx.game.extra.Utils.USER_FLOOR;
+import static com.mygdx.game.extra.Utils.USER_ROOF;
 import static com.mygdx.game.extra.Utils.WORLD_HEIGHT;
 import static com.mygdx.game.extra.Utils.WORLD_WIDTH;
 
@@ -19,45 +22,51 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.mygdx.game.MainGame;
 import com.mygdx.game.actors.Bird;
 import com.mygdx.game.actors.Pipes;
-
-public class GameScreen  extends BaseScreen{
+//Todo 4. Implementamos en GameScreen la interfaz ContactListener
+public class GameScreen  extends BaseScreen implements ContactListener {
 
 
     private  static final float TIME_TO_SPAWN_PIPES = 1.5f;
     private float timeToCreatePipe;
     private Stage stage;
     private Bird bird;
+    private Body bodyFloor;
+    private Body bodyRoof;
+    private Fixture fixtureFloor;
+    private Fixture fixtureRoof;
+
+    //Todo 3. Creamos una valiabre contador....
+    private int scoreNumber;
 
     private Image background;
 
     private World world;
-
-
     private Array<Pipes> arrayPipes;
 
     private Music musicbg;
+    private Sound hitSound;
+    private Sound gameOverSound;
 
     //Depuración
     private Box2DDebugRenderer debugRenderer;
-
-    //Todo 0. Cambiamos el nombre de ortCamera a worldCamera para diferenciarla con la cámara de la puntuación
     private OrthographicCamera worldCamera;
-
-    //Todo 1: Para añadir un texto con la puntuación es necesario una cámara extra,
-    // ya que las fuentes son uno de los pocos elementos que no se pueden añadir en función
-    // de las medidas del mundo, sino que se hará en función de las medidas de la pantalla.
-    // Para ello necesitaremos otra cámara que proyectarán simultaneamente, una el mundo del juego
-    // y otra solo la fuente con la puntuación. Así como crearnos un Bitmap font para manejar el texto
+    //Score Cámara
     private OrthographicCamera fontCamera;
     private BitmapFont score;
 
@@ -66,6 +75,9 @@ public class GameScreen  extends BaseScreen{
         super(mainGame);
 
         this.world = new World(new Vector2(0,-10), true);
+        //Todo 5. Le pasamos al mundo el objeto que implemente la interfaz contactListener (en este caso será la propia instancia de GameScreen)
+        this.world.setContactListener(this);
+
         FitViewport fitViewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT);
         this.stage = new Stage(fitViewport);
 
@@ -73,11 +85,12 @@ public class GameScreen  extends BaseScreen{
         this.arrayPipes = new Array();
         this.timeToCreatePipe = 0f;
 
-        this.musicbg = this.mainGame.assetManager.getMusicBG();
         this.worldCamera = (OrthographicCamera) this.stage.getCamera();
         this.debugRenderer = new Box2DDebugRenderer();
 
+        prepareGameSound();
         prepareScore();
+
     }
 
 
@@ -111,38 +124,47 @@ public class GameScreen  extends BaseScreen{
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(WORLD_WIDTH / 2f, 0.6f);
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bodyDef);
-        body.setUserData(USER_FLOOR);
+        this.bodyFloor = world.createBody(bodyDef);
+
 
         PolygonShape edge = new PolygonShape();
         edge.setAsBox(2.3f, 0.5f);
-        body.createFixture(edge, 3);
+        this.fixtureFloor = this.bodyFloor.createFixture(edge, 3);
+        this.fixtureFloor.setUserData(USER_FLOOR);
         edge.dispose();
     }
 
     public void addRoof(){
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        Body body = world.createBody(bodyDef);
+        this.bodyRoof = world.createBody(bodyDef);
 
         EdgeShape edge = new EdgeShape();
         edge.set(0,WORLD_HEIGHT,WORLD_WIDTH,WORLD_HEIGHT);
-        body.createFixture(edge, 1);
+        this.fixtureRoof = this.bodyRoof.createFixture(edge, 1);
+        this.fixtureRoof.setUserData(USER_ROOF);
         edge.dispose();
     }
 
     //Creamos un método para configurar tod o lo relacionado con el texto de la puntuación
-    //Todo 4.1 Nos acordamos de llamar a dicho método en el constructor
+
     private void prepareScore(){
-        //Todo 3. Cargamos la fuente y configuramos la escala (vamos probando el tamaño
+        //Todo 3.1 ...Y la inicializamos a 0
+        this.scoreNumber = 0;
         this.score = this.mainGame.assetManager.getFont();
         this.score.getData().scale(1f);
 
-        //Todo 4. Creamos la cámara, y se le da el tamaño de la PANTALLA (EN PIXELES) y luego se actualiza
+
         this.fontCamera = new OrthographicCamera();
         this.fontCamera.setToOrtho(false, SCREEN_WIDTH,SCREEN_HEIGTH);
         this.fontCamera.update();
 
+    }
+
+    private void prepareGameSound() {
+        this.musicbg = this.mainGame.assetManager.getMusicBG();
+        this.gameOverSound = this.mainGame.assetManager.getGameOverSound();
+        this.hitSound = this.mainGame.assetManager.getHitSound();
     }
 
 
@@ -192,8 +214,7 @@ public class GameScreen  extends BaseScreen{
 
         addPipes(delta);
 
-        //Todo 5.1 Justo antes de dibujar el mundo, le volvemos a pasar al batch, los datos de
-        // la cámara del mundo, para que vuelva a representar todo en función del tamaño de este
+
         this.stage.getBatch().setProjectionMatrix(worldCamera.combined);
         this.stage.act();
         this.world.step(delta,6,2);
@@ -203,11 +224,9 @@ public class GameScreen  extends BaseScreen{
 
         removePipes();
 
-        //Todo 5.Cargamos la matriz de proyección con los datos de la cámara de la fuente,
-        // para que proyecte el texto con las dimensiones en píxeles
         this.stage.getBatch().setProjectionMatrix(this.fontCamera.combined);
         this.stage.getBatch().begin();
-        this.score.draw(this.stage.getBatch(), ""+arrayPipes.size,SCREEN_WIDTH/2, 725);
+        this.score.draw(this.stage.getBatch(), ""+this.scoreNumber,SCREEN_WIDTH/2, 725);
         this.stage.getBatch().end();
     }
 
@@ -226,5 +245,67 @@ public class GameScreen  extends BaseScreen{
 
         this.stage.dispose();
         this.world.dispose();
+    }
+
+
+
+    /// ********************************************* ///
+    /// *************** COLISIONES ****************** ///
+    /// ********************************************* ///
+    //Todo 6. Nos creamos un método auxiliar areColider, que nos ayude a determinar qué objetos han colisionado
+    private boolean areColider(Contact contact, Object objA, Object objB) {
+
+        return (contact.getFixtureA().getUserData().equals(objA) && contact.getFixtureB().getUserData().equals(objB)) ||
+                (contact.getFixtureA().getUserData().equals(objB) && contact.getFixtureB().getUserData().equals(objA));
+    }
+
+    //Método que se llamará cada vez que se produzca cualquier contacto
+    @Override
+    public void beginContact(Contact contact) {
+
+        //Todo 7. Si 'han colisionado' el pájaro con el contador sumamos 1 al contador...
+        if (areColider(contact, USER_BIRD, USER_COUNTER)) {
+            this.scoreNumber++;
+        } else {
+            //Todo 8 En cualquier otro caso significaría que el pájaro ha colisionado con algún otro elemento y se acaba la partida
+            //Todo 8.1 Lanzamos el método hurt del pájaro para que se cambie el estado a DEAD
+            bird.hurt();
+            this.hitSound.play();
+            //Todo 8.2 Paramos la música y lanzamos sonido de gameOver
+            this.musicbg.stop();
+            this.gameOverSound.play();
+            //Todo 8.3 Recorremos el array de Pipes para parar los que se encuentren creados en este momento
+            for (Pipes pipe : arrayPipes) {
+                pipe.stopPipes();
+            }
+
+            //Todo 8.4 Se lanza la secuencia de acciones,cuya última será el pasar a la ventana de GameOverScreen
+            this.stage.addAction(Actions.sequence(
+                    Actions.delay(1.5f),
+                    Actions.run(new Runnable() {
+                        @Override
+                        public void run() {
+                            mainGame.setScreen(mainGame.gameOverScreen);
+                        }
+                    })
+
+            ));
+
+        }
+    }
+
+    @Override
+    public void endContact(Contact contact) {
+
+    }
+
+    @Override
+    public void preSolve(Contact contact, Manifold oldManifold) {
+
+    }
+
+    @Override
+    public void postSolve(Contact contact, ContactImpulse impulse) {
+
     }
 }

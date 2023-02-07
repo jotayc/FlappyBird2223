@@ -19,15 +19,18 @@ public class Utils {
     public static final String PIPE_UP = "pipeUp";
     public static final String SOUND_JUMP = "jump.mp3";
     public static final String MUSIC_BG = "musicbg.mp3";
+    public static final String GAMEOVER_SOUND = "gameover.mp3";
+    public static final String HIT_SOUND = "hit.mp3";
 
     //Creamos los identificadores de las fuentes
     public static final String FONT_FNT = "FBFont.fnt";
     public static final String FONT_PNG = "FBFont.png";
 
-    //Identificador de cuerpos
+    //Identificadores de cuerpos
     public static final String USER_BIRD = "bird";
-    public static final String USER_PIPE_DOWN = "pipeDown";
-    public static final String USER_PIPE_UP = "pipeUp";
-    public static final String USER_COUNTER = "counter";
     public static final String USER_FLOOR = "floor";
+    public static final String USER_ROOF = "roof";
+    public static final String USER_PIPE_DOWN= "pipeDown";
+    public static final String USER_PIPE_UP= "pipeTop";
+    public static final String USER_COUNTER= "counter";
 }

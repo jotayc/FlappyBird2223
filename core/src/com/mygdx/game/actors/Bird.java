@@ -77,7 +77,11 @@ public class Bird extends Actor {
         return this.state;
     }
 
-
+    //Todo 1. Creamos un método 'hurt' para cambiar el estado del pájaro cuando este colisione
+    public void hurt() {
+        state = STATE_DEAD;
+        stateTime = 0f;
+    }
 
     @Override
     public void act(float delta) {
